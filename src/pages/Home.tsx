@@ -29,6 +29,7 @@ const Home = () => {
   const [url, setUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [conditions, setConditions] = useState<Condition[][]>([[{ left: '', operator: 'equals', value: '' }]]);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,9 +47,11 @@ const Home = () => {
           }));
           setColumns(columns);
           setApiData(data);
+          setError('');
         }
       } catch (error) {
         console.error('Error getting API info:', error);
+        setError('Failed to fetch data. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -166,7 +169,15 @@ const Home = () => {
         onChange={handleUrlChange}
       />
 
-      {url && (
+      {error && (
+        <Box className="flex flex-col items-center w-3/4 mt-4">
+          <Typography variant="body1" className="text-red-500">
+            {error}
+          </Typography>
+        </Box>
+      )}
+
+      {error === '' && url && (
         <>
           {conditions?.map((groupConditions, groupIndex) => (
             <>
