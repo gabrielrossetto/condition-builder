@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Box, Typography, MenuItem, IconButton, Skeleton, Chip } from '@mui/material';
+import { TextField, Box, Typography, MenuItem, IconButton, Skeleton, Chip, Button } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -28,7 +28,7 @@ const Home = () => {
   const [columns, setColumns] = useState<GridColDef[]>([]);
   const [url, setUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [conditions, setConditions] = useState<Condition[]>([{ left: '', operator: 'equals', value: '' }]);
+  const [conditions, setConditions] = useState<Condition[][]>([[{ left: '', operator: 'equals', value: '' }]]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,32 +59,44 @@ const Home = () => {
     }
   }, [url]);
 
-  const handleLeftConditionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+  const handleLeftConditionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
     const newConditions = [...conditions];
-    newConditions[index].left = event.target.value;
+    newConditions[groupIndex][index].left = event.target.value;
     setConditions(newConditions);
   };
 
-  const handleOperatorChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+  const handleOperatorChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
     const newConditions = [...conditions];
-    newConditions[index].operator = event.target.value;
+    newConditions[groupIndex][index].operator = event.target.value;
     setConditions(newConditions);
   };
 
-  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
     const newConditions = [...conditions];
-    newConditions[index].value = event.target.value;
+    newConditions[groupIndex][index].value = event.target.value;
     setConditions(newConditions);
   };
 
-  const handleAddCondition = () => {
-    setConditions([...conditions, { left: '', operator: '', value: '' }]);
+  const handleAddCondition = (groupIndex: number) => {
+    const newConditions = [...conditions];
+    newConditions[groupIndex] = [...newConditions[groupIndex], { left: '', operator: '', value: '' }];
+    setConditions(newConditions);
   };
 
-  const handleDeleteCondition = (index: number) => {
+  const handleDeleteCondition = (groupIndex: number, index: number) => {
     const newConditions = [...conditions];
-    newConditions.splice(index, 1);
+    const group = newConditions[groupIndex];
+    group.splice(index, 1);
+
+    if (group.length === 0) {
+      newConditions.splice(groupIndex, 1);
+    }
+
     setConditions(newConditions);
+  };
+
+  const handleAddGroup = () => {
+    setConditions([...conditions, [{ left: '', operator: 'equals', value: '' }]]);
   };
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -92,36 +104,40 @@ const Home = () => {
   };
 
   const filterData = () => {
+    console.log({ conditions });
+
     if (conditions.length === 0) {
       return apiData;
     }
 
     return apiData.filter((rowData) =>
-      conditions.some((condition) => {
-        const { left, operator, value } = condition;
-        const columnValue = rowData[left];
+      conditions.every((groupConditions) =>
+        groupConditions.some((condition) => {
+          const { left, operator, value } = condition;
+          const columnValue = rowData[left];
 
-        if (!left || !operator || !value) {
-          return true;
-        }
-
-        switch (operator) {
-          case 'equals':
-            return String(columnValue) === value;
-          case 'greaterThan':
-            return Number(columnValue) > Number(value);
-          case 'lessThan':
-            return Number(columnValue) < Number(value);
-          case 'contain':
-            return String(columnValue).includes(value);
-          case 'notContain':
-            return !String(columnValue).includes(value);
-          case 'regex':
-            return new RegExp(value).test(String(columnValue));
-          default:
+          if (!left || !operator || !value) {
             return true;
-        }
-      })
+          }
+
+          switch (operator) {
+            case 'equals':
+              return String(columnValue) === value;
+            case 'greaterThan':
+              return Number(columnValue) > Number(value);
+            case 'lessThan':
+              return Number(columnValue) < Number(value);
+            case 'contain':
+              return String(columnValue).includes(value);
+            case 'notContain':
+              return !String(columnValue).includes(value);
+            case 'regex':
+              return new RegExp(value).test(String(columnValue));
+            default:
+              return true;
+          }
+        })
+      )
     );
   };
 
@@ -143,72 +159,80 @@ const Home = () => {
 
       {url && (
         <>
-          <Box className="flex flex-col items-center justify-center w-3/4 gap-6 p-4 mt-4 border shadow-md">
-            {conditions.map((condition, index) => (
-              <Box key={index} className="flex items-center justify-center w-full gap-4">
-                {loading && (
-                  <>
-                    <Skeleton variant="rectangular" width="30%" height={40} />
-                    <Skeleton variant="rectangular" width="30%" height={40} />
-                    <Skeleton variant="rectangular" width="30%" height={40} />
-                    <Skeleton variant="circular" width={35} height={35} />
-                    <Skeleton variant="circular" width={35} height={35} />
-                  </>
-                )}
+          {conditions?.map((groupConditions, groupIndex) => (
+            <Box key={groupIndex} className="flex flex-col items-center justify-center w-3/4 gap-6 p-4 mt-4 border shadow-md">
+              {groupConditions?.map((condition, index) => (
+                <Box key={index} className="flex items-center justify-center w-full gap-4">
+                  {loading && (
+                    <>
+                      <Skeleton variant="rectangular" width="30%" height={40} />
+                      <Skeleton variant="rectangular" width="30%" height={40} />
+                      <Skeleton variant="rectangular" width="30%" height={40} />
+                      <Skeleton variant="circular" width={35} height={35} />
+                      <Skeleton variant="circular" width={35} height={35} />
+                    </>
+                  )}
 
-                {url && !loading && (
-                  <>
-                    {index > 0 && (
-                      <Typography variant="body1" className="mr-2">OR</Typography>
-                    )}
-                    <TextField
-                      className="w-1/3"
-                      select
-                      label="Left Condition"
-                      value={condition.left}
-                      onChange={(event) => handleLeftConditionChange(event, index)}
-                    >
-                      {columns.map((column) => (
-                        <MenuItem key={column.field} value={column.field}>
-                          {column.headerName}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                  {url && !loading && (
+                    <>
+                      {index > 0 && (
+                        <Typography variant="body1" className="mr-2">OR</Typography>
+                      )}
+                      <TextField
+                        className="w-1/3"
+                        select
+                        label="Left Condition"
+                        value={condition.left}
+                        onChange={(event) => handleLeftConditionChange(event, groupIndex, index)}
+                      >
+                        {columns?.map((column) => (
+                          <MenuItem key={column.field} value={column.field}>
+                            {column.headerName}
+                          </MenuItem>
+                        ))}
+                      </TextField>
 
-                    <TextField
-                      className="w-1/3"
-                      select
-                      label="Operator"
-                      value={condition.operator}
-                      onChange={(event) => handleOperatorChange(event, index)}
-                    >
-                      {comparisonOptions.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                      <TextField
+                        className="w-1/3"
+                        select
+                        label="Operator"
+                        value={condition.operator}
+                        onChange={(event) => handleOperatorChange(event, groupIndex, index)}
+                      >
+                        {comparisonOptions?.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
 
-                    <TextField
-                      className="w-1/3"
-                      placeholder="Value"
-                      value={condition.value}
-                      onChange={(event) => handleValueChange(event, index)}
-                    />
+                      <TextField
+                        className="w-1/3"
+                        placeholder="Value"
+                        value={condition.value}
+                        onChange={(event) => handleValueChange(event, groupIndex, index)}
+                      />
 
-                    <IconButton color="info" onClick={handleAddCondition}>
-                      <AddIcon />
-                    </IconButton>
+                      <IconButton color="info" onClick={() => handleAddCondition(groupIndex)}>
+                        <AddIcon />
+                      </IconButton>
 
-                    <IconButton color="warning" onClick={() => handleDeleteCondition(index)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </>
-                )}
+                      <IconButton color="warning" onClick={() => handleDeleteCondition(groupIndex, index)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
+                  )}
+                </Box>
+              ))}
+            </Box>
+          ))}
 
-              </Box>
-            ))}
+          <Box className="flex flex-col items-start w-3/4 mt-4">
+            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddGroup}>
+              AND
+            </Button>
           </Box>
+
 
           <Box className="flex flex-col items-start w-3/4 mt-4">
             <Typography variant="h4" className="font-extrabold">
