@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Box, Typography, MenuItem, IconButton, Skeleton, Chip, Button } from '@mui/material';
+import { TextField, Box, Typography, MenuItem, IconButton, Skeleton, Chip, Button, Divider } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -79,7 +79,10 @@ const Home = () => {
 
   const handleAddCondition = (groupIndex: number) => {
     const newConditions = [...conditions];
-    newConditions[groupIndex] = [...newConditions[groupIndex], { left: '', operator: '', value: '' }];
+    newConditions[groupIndex] = [
+      ...newConditions[groupIndex],
+      { left: '', operator: 'equals', value: '' }
+    ];
     setConditions(newConditions);
   };
 
@@ -104,15 +107,21 @@ const Home = () => {
   };
 
   const filterData = () => {
-    console.log({ conditions });
-
     if (conditions.length === 0) {
       return apiData;
     }
 
-    return apiData.filter((rowData) =>
-      conditions.every((groupConditions) =>
-        groupConditions.some((condition) => {
+    const filteredConditions = conditions?.filter(groupConditions =>
+      groupConditions.some(condition => condition.left && condition.operator && condition.value)
+    );
+
+    if (filteredConditions.length === 0) {
+      return apiData;
+    }
+
+    return apiData?.filter((rowData) =>
+      filteredConditions?.every((groupConditions) =>
+        groupConditions?.some((condition) => {
           const { left, operator, value } = condition;
           const columnValue = rowData[left];
 
@@ -160,82 +169,99 @@ const Home = () => {
       {url && (
         <>
           {conditions?.map((groupConditions, groupIndex) => (
-            <Box key={groupIndex} className="flex flex-col items-center justify-center w-3/4 gap-6 p-4 mt-4 border shadow-md">
-              {groupConditions?.map((condition, index) => (
-                <Box key={index} className="flex items-center justify-center w-full gap-4">
-                  {loading && (
-                    <>
-                      <Skeleton variant="rectangular" width="30%" height={40} />
-                      <Skeleton variant="rectangular" width="30%" height={40} />
-                      <Skeleton variant="rectangular" width="30%" height={40} />
-                      <Skeleton variant="circular" width={35} height={35} />
-                      <Skeleton variant="circular" width={35} height={35} />
-                    </>
-                  )}
-
-                  {url && !loading && (
-                    <>
-                      {index > 0 && (
-                        <Typography variant="body1" className="mr-2">OR</Typography>
-                      )}
-                      <TextField
-                        className="w-1/3"
-                        select
-                        label="Left Condition"
-                        value={condition.left}
-                        onChange={(event) => handleLeftConditionChange(event, groupIndex, index)}
-                      >
-                        {columns?.map((column) => (
-                          <MenuItem key={column.field} value={column.field}>
-                            {column.headerName}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-
-                      <TextField
-                        className="w-1/3"
-                        select
-                        label="Operator"
-                        value={condition.operator}
-                        onChange={(event) => handleOperatorChange(event, groupIndex, index)}
-                      >
-                        {comparisonOptions?.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-
-                      <TextField
-                        className="w-1/3"
-                        placeholder="Value"
-                        value={condition.value}
-                        onChange={(event) => handleValueChange(event, groupIndex, index)}
-                      />
-
-                      <IconButton color="info" onClick={() => handleAddCondition(groupIndex)}>
-                        <AddIcon />
-                      </IconButton>
-
-                      <IconButton color="warning" onClick={() => handleDeleteCondition(groupIndex, index)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </>
-                  )}
+            <>
+              {groupIndex > 0 && (
+                <Box className="flex flex-col items-start w-3/4 mt-4">
+                  <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
+                  <Box className="ml-5">
+                    <Typography variant="h6" className="font-bold text-gray-500">
+                      AND
+                    </Typography>
+                  </Box>
+                  <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
                 </Box>
-              ))}
-            </Box>
+              )}
+
+              <Box key={groupIndex} className="flex flex-col items-center justify-center w-3/4 gap-6 p-4 mt-4 border shadow-md">
+                {groupConditions?.map((condition, index) => (
+                  <Box key={index} className="flex items-center justify-center w-full gap-4">
+                    {loading && (
+                      <>
+                        <Skeleton variant="rectangular" className="w-1/3 !h-10" />
+                        <Skeleton variant="rectangular" className="w-1/3 !h-10" />
+                        <Skeleton variant="rectangular" className="w-1/3 !h-10" />
+                        <Skeleton variant="circular" className="w-12 !h-12" />
+                        <Skeleton variant="circular" className="w-12 !h-12" />
+                      </>
+                    )}
+
+                    {url && !loading && (
+                      <>
+                        {index > 0 && (
+                          <Typography variant="body1" className="mr-2">OR</Typography>
+                        )}
+                        <TextField
+                          className="w-1/3"
+                          select
+                          label="Left Condition"
+                          value={condition.left}
+                          onChange={(event) => handleLeftConditionChange(event, groupIndex, index)}
+                        >
+                          {columns?.map((column) => (
+                            <MenuItem key={column.field} value={column.field}>
+                              {column.headerName}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+
+                        <TextField
+                          className="w-1/3"
+                          select
+                          label="Operator"
+                          value={condition.operator}
+                          onChange={(event) => handleOperatorChange(event, groupIndex, index)}
+                        >
+                          {comparisonOptions?.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+
+                        <TextField
+                          className="w-1/3"
+                          placeholder="Value"
+                          value={condition.value}
+                          onChange={(event) => handleValueChange(event, groupIndex, index)}
+                        />
+
+                        <IconButton color="info" onClick={() => handleAddCondition(groupIndex)}>
+                          <AddIcon />
+                        </IconButton>
+
+                        <IconButton color="warning" onClick={() => handleDeleteCondition(groupIndex, index)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </>
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </>
           ))}
 
-          <Box className="flex flex-col items-start w-3/4 mt-4">
+          <Box className="flex flex-col items-start w-3/4">
+            {conditions.length > 0 && (
+              <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
+            )}
+
             <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddGroup}>
-              AND
+              {conditions.length === 0 ? 'Add Filters' : 'AND'}
             </Button>
           </Box>
 
-
-          <Box className="flex flex-col items-start w-3/4 mt-4">
-            <Typography variant="h4" className="font-extrabold">
+          <Box className="flex flex-col items-start w-3/4 mt-8">
+            <Typography variant="h4" className="!font-extrabold">
               Result
             </Typography>
 
@@ -246,8 +272,8 @@ const Home = () => {
 
             {loading && (
               <Box className="flex gap-2 mt-2 mb-2">
-                <Skeleton variant="rectangular" width={100} height={20} />
-                <Skeleton variant="rectangular" width={100} height={20} />
+                <Skeleton variant="rectangular" className="w-32 !h-6" />
+                <Skeleton variant="rectangular" className="w-32 !h-6" />
               </Box>
             )}
           </Box>
@@ -256,11 +282,11 @@ const Home = () => {
             <Box className="w-full">
               {loading ? (
                 <Box className="flex flex-col items-center gap-4">
-                  <Skeleton variant="rectangular" width="100%" height={20} />
-                  <Skeleton variant="rectangular" width="100%" height={20} />
-                  <Skeleton variant="rectangular" width="100%" height={20} />
-                  <Skeleton variant="rectangular" width="100%" height={20} />
-                  <Skeleton variant="rectangular" width="100%" height={20} />
+                  <Skeleton variant="rectangular" className="w-full !h-6" />
+                  <Skeleton variant="rectangular" className="w-full !h-6" />
+                  <Skeleton variant="rectangular" className="w-full !h-6" />
+                  <Skeleton variant="rectangular" className="w-full !h-6" />
+                  <Skeleton variant="rectangular" className="w-full !h-6" />
                 </Box>
               ) : (
                 <DataGrid
