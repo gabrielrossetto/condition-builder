@@ -107,5 +107,5 @@ Each condition supports the following comparisons:
 
 ## Documentation
 
-- [Components Documentation](https://github.com/gabrielrossetto/condition-builder/docs/components.md)
-- [Hooks Documentation](https://github.com/gabrielrossetto/condition-builder/docs/hooks.md)
+- [Components Documentation](https://github.com/gabrielrossetto/condition-builder/blob/main/docs/components.md)
+- [Hooks Documentation](https://github.com/gabrielrossetto/condition-builder/blob/main/docs/hooks.md)
