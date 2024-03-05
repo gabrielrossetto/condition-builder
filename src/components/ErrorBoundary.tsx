@@ -5,8 +5,8 @@ const ErrorBoundary = ({ error }: ErrorBoundaryProps) => {
   return (
     <>
       {error && (
-        <Box className="flex flex-col items-center w-3/4 mt-4">
-          <Typography variant="body1" className="text-red-500">
+        <Box className="flex flex-col items-center w-3/4 mt-4" data-testid="error-boundary">
+          <Typography variant="body1" className="text-red-500" data-testid="error-boundary-message">
             {error}
           </Typography>
         </Box>

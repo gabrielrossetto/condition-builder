@@ -20,10 +20,10 @@ const ConditionBuilder = ({
   comparisonOptions
 }: ConditionBuilderProps) => {
 
-  const renderAndSeparator = (groupIndex: number) => {
+  const renderSeparator = (groupIndex: number) => {
     return (
       groupIndex > 0 && (
-        <Box key={`group-divider-${groupIndex}`} className="flex flex-col items-start w-3/4 mt-4">
+        <Box key={`group-divider-${groupIndex}`} className="flex flex-col items-start w-3/4 mt-4" data-testid={`condition-builder-group-divider-${groupIndex}`}>
           <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
           <Box className="ml-5">
             <Typography variant="h6" className="font-bold text-gray-500">
@@ -36,19 +36,19 @@ const ConditionBuilder = ({
     )
   };
 
-  const renderHoverSkeleton = (condition: ConditionType) => {
+  const renderContentHoverSkeleton = (condition: ConditionType) => {
     return (
       condition.operator === 'OR_HOVER' && (
         <Skeleton variant="rectangular" className="w-full !h-12" />
       ))
   }
 
-  const renderElements = (url: string, loading: boolean, condition: ConditionType, index: number, groupIndex: number) => {
+  const renderContentElements = (url: string, loading: boolean, condition: ConditionType, index: number, groupIndex: number) => {
     return (
       url && !loading && condition.operator !== 'OR_HOVER' && (
         <>
           {index > 0 && (
-            <Typography variant="body1" className="mr-2 !font-extrabold text-blue-500">OR</Typography>
+            <Typography variant="body1" className="mr-2 !font-extrabold text-blue-500" data-testid={`condition-builder-condition-or-${groupIndex}-${index}`}>OR</Typography>
           )}
           <TextField
             className="w-1/3"
@@ -56,6 +56,7 @@ const ConditionBuilder = ({
             label="Left Condition"
             value={condition.left}
             onChange={(event) => handleLeftConditionChange(event, groupIndex, index)}
+            data-testid={`condition-builder-left-condition-${groupIndex}-${index}`}
           >
             {columns.map((column) => (
               <MenuItem key={column.field} value={column.field}>
@@ -70,6 +71,7 @@ const ConditionBuilder = ({
             label="Operator"
             value={condition.operator}
             onChange={(event) => handleOperatorChange(event, groupIndex, index)}
+            data-testid={`condition-builder-operator-${groupIndex}-${index}`}
           >
             {comparisonOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -84,6 +86,7 @@ const ConditionBuilder = ({
             value={condition.value}
             onChange={(event) => handleValueChange(event, groupIndex, index)}
             type={condition.operator === 'greaterThan' || condition.operator === 'lessThan' ? 'number' : 'text'}
+            data-testid={`condition-builder-value-${groupIndex}-${index}`}
           />
 
           <IconButton
@@ -91,11 +94,16 @@ const ConditionBuilder = ({
             onClick={() => handleAddCondition(groupIndex)}
             onMouseEnter={() => handleMouseEnterAddIcon(groupIndex)}
             onMouseLeave={() => handleMouseLeaveAddIcon(groupIndex)}
+            data-testid={`condition-builder-add-condition-${groupIndex}`}
           >
             <AddIcon />
           </IconButton>
 
-          <IconButton color="warning" onClick={() => handleDeleteCondition(groupIndex, index)}>
+          <IconButton
+            color="error"
+            onClick={() => handleDeleteCondition(groupIndex, index)}
+            data-testid={`condition-builder-delete-condition-${groupIndex}-${index}`}
+          >
             <DeleteIcon />
           </IconButton>
         </>
@@ -107,11 +115,30 @@ const ConditionBuilder = ({
       <Box key={`group-${groupIndex}`} className="flex flex-col items-center justify-center w-3/4 gap-6 p-4 mt-4 border rounded shadow-md">
         {groupConditions.map((condition: ConditionType, index: number) => (
           <Box key={`${groupIndex}-${index}`} className="flex items-center justify-center w-full gap-4">
-            {renderHoverSkeleton(condition)}
+            {renderContentHoverSkeleton(condition)}
 
-            {renderElements(url, loading, condition, index, groupIndex)}
+            {renderContentElements(url, loading, condition, index, groupIndex)}
           </Box>
         ))}
+      </Box>
+    )
+  }
+
+  const renderBottomActions = (conditions: ConditionType[][]) => {
+    return (
+      <Box className="flex flex-col items-start w-3/4">
+        {conditions.length > 0 && (
+          <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
+        )}
+
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          onClick={handleAddGroup}
+          data-testid="condition-builder-add-group-button"
+        >
+          {conditions.length === 0 ? 'Add Filters' : 'AND'}
+        </Button>
       </Box>
     )
   }
@@ -120,21 +147,13 @@ const ConditionBuilder = ({
     <>
       {conditions.map((groupConditions, groupIndex) => (
         <React.Fragment key={`group-fragment-${groupIndex}`}>
-          {renderAndSeparator(groupIndex)}
+          {renderSeparator(groupIndex)}
 
           {renderContent(groupConditions, groupIndex)}
         </React.Fragment>
       ))}
 
-      <Box className="flex flex-col items-start w-3/4">
-        {conditions.length > 0 && (
-          <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
-        )}
-
-        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddGroup}>
-          {conditions.length === 0 ? 'Add Filters' : 'AND'}
-        </Button>
-      </Box>
+      {renderBottomActions(conditions,)}
     </>
   );
 };

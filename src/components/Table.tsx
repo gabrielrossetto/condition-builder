@@ -4,18 +4,18 @@ import { TableProps } from '../@types/types';
 
 const Table = ({ apiData, columns, loading, filteredData }: TableProps) => {
   return (
-    <Box className="flex flex-col items-start w-3/4 mt-8">
+    <Box className="flex flex-col items-start w-3/4 mt-8" data-testid="table">
       <Typography variant="h4" className="!font-extrabold">
         Result
       </Typography>
 
       <Box className="flex gap-4 mt-2 mb-2">
-        <Chip label={`Total: ${apiData.length || '-'}`} />
-        <Chip color="primary" label={`Filtered: ${filteredData.length || '-'}`} />
+        <Chip label={`Total: ${apiData.length || '-'}`} data-testid="table-total-chip" />
+        <Chip color="primary" label={`Filtered: ${filteredData.length || '-'}`} data-testid="table-filtered-chip" />
       </Box>
 
       {loading && (
-        <Box className="flex gap-2 mt-2 mb-2">
+        <Box className="flex gap-2 mt-2 mb-2" data-testid="table-loading-skeleton">
           <Skeleton variant="rectangular" className="w-32 !h-6" />
           <Skeleton variant="rectangular" className="w-32 !h-6" />
         </Box>
@@ -41,6 +41,7 @@ const Table = ({ apiData, columns, loading, filteredData }: TableProps) => {
                   paginationModel: { pageSize: 25, page: 0 },
                 },
               }}
+              data-testid="table-data-grid"
             />
           )}
         </Box>

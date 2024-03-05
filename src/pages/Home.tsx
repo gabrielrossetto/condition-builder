@@ -81,7 +81,7 @@ const Home = () => {
   return (
     <Box className="flex flex-col items-center justify-center w-full mt-4">
       <Box className="flex flex-col items-start w-3/4 mt-4">
-        <Typography variant="h2">
+        <Typography variant="h2" data-testid="home-heading">
           Condition Builder
         </Typography>
       </Box>
@@ -92,6 +92,7 @@ const Home = () => {
         helperText="Insert data url. Returning data MUST be an array json with each element is key/value pair."
         value={url}
         onChange={handleUrlChange}
+        data-testid="home-url-input"
       />
 
       <ErrorBoundary error={error} />
