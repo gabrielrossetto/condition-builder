@@ -1,79 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Box, Typography, TextField } from '@mui/material';
-import { GridColDef } from '@mui/x-data-grid';
 import ConditionBuilder from '../components/ConditionBuilder';
 import Table from '../components/Table';
 import ErrorBoundary from '../components/ErrorBoundary';
-interface ApiDataRowType {
-  [key: string]: string | number | Array<string | number>;
-}
-interface Condition {
-  left: string;
-  operator: string;
-  value: string;
-}
-
-const comparisonOptions = [
-  { label: 'Equals', value: 'equals' },
-  { label: 'Greater than', value: 'greaterThan' },
-  { label: 'Less than', value: 'lessThan' },
-  { label: 'Contain', value: 'contain' },
-  { label: 'Not Contain', value: 'notContain' },
-  { label: 'Regex', value: 'regex' },
-];
+import { useDataFetching } from '../hooks/useDataFetching';
+import { ConditionType } from '../@types/types';
+import { comparisonOptions } from '../utils/comparisonOptions';
 
 const Home = () => {
-  const [apiData, setApiData] = useState<ApiDataRowType[]>([]);
-  const [columns, setColumns] = useState<GridColDef[]>([]);
   const [url, setUrl] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [conditions, setConditions] = useState<Condition[][]>([[{ left: '', operator: 'equals', value: '' }]]);
-  const [error, setError] = useState<string>('');
+  const [conditions, setConditions] = useState<ConditionType[][]>([[{ left: '', operator: 'equals', value: '' }]]);
+  const { apiData, columns, loading, error, filteredData } = useDataFetching({ url, conditions });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(url);
-        const data: ApiDataRowType[] = await response.json();
-
-        if (data.length > 0) {
-          const columns: GridColDef[] = Object.keys(data[0]).map((columnName: string) => ({
-            field: columnName,
-            headerName: columnName,
-            flex: 1,
-            sortable: true,
-          }));
-          setColumns(columns);
-          setApiData(data);
-          setError('');
-        }
-      } catch (error) {
-        console.error('Error getting API info:', error);
-        setError('Failed to fetch data. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (url) {
-      fetchData();
-    }
-  }, [url]);
-
-  const handleLeftConditionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
+  const handleLeftConditionChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
     const newConditions = [...conditions];
     newConditions[groupIndex][index].left = event.target.value;
     setConditions(newConditions);
   };
 
-  const handleOperatorChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
+  const handleOperatorChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
     const newConditions = [...conditions];
     newConditions[groupIndex][index].operator = event.target.value;
     setConditions(newConditions);
   };
 
-  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => {
     const newConditions = [...conditions];
     newConditions[groupIndex][index].value = event.target.value;
     setConditions(newConditions);
@@ -123,52 +74,8 @@ const Home = () => {
     setConditions([...conditions, [{ left: '', operator: 'equals', value: '' }]]);
   };
 
-  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleUrlChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setUrl(event.target.value);
-  };
-
-  const filterData = () => {
-    if (conditions.length === 0) {
-      return apiData;
-    }
-
-    const filteredConditions = conditions?.filter(groupConditions =>
-      groupConditions.some(condition => condition.left && condition.operator && condition.value)
-    );
-
-    if (filteredConditions.length === 0) {
-      return apiData;
-    }
-
-    return apiData?.filter((rowData) =>
-      filteredConditions?.every((groupConditions) =>
-        groupConditions?.some((condition) => {
-          const { left, operator, value } = condition;
-          const columnValue = rowData[left];
-
-          if (!left || !operator || !value) {
-            return true;
-          }
-
-          switch (operator) {
-            case 'equals':
-              return String(columnValue) === value;
-            case 'greaterThan':
-              return Number(columnValue) > Number(value);
-            case 'lessThan':
-              return Number(columnValue) < Number(value);
-            case 'contain':
-              return String(columnValue).includes(value);
-            case 'notContain':
-              return !String(columnValue).includes(value);
-            case 'regex':
-              return new RegExp(value).test(String(columnValue));
-            default:
-              return true;
-          }
-        })
-      )
-    );
   };
 
   return (
@@ -211,7 +118,7 @@ const Home = () => {
             apiData={apiData}
             columns={columns}
             loading={loading}
-            filterData={filterData}
+            filteredData={filteredData}
           />
         </>
       )}

@@ -1,8 +1,5 @@
 import { Box, Typography } from '@mui/material';
-
-interface ErrorBoundaryProps {
-  error: string;
-}
+import { ErrorBoundaryProps } from '../@types/types';
 
 const ErrorBoundary = ({ error }: ErrorBoundaryProps) => {
   return (

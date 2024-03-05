@@ -1,18 +1,8 @@
 import { Box, Typography, Chip, Skeleton } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
+import { TableProps } from '../@types/types';
 
-interface ApiDataRowType {
-  [key: string]: string | number | Array<string | number>;
-}
-
-interface TableProps {
-  apiData: ApiDataRowType[];
-  columns: GridColDef[];
-  loading: boolean;
-  filterData: () => ApiDataRowType[];
-}
-
-const Table = ({ apiData, columns, loading, filterData }: TableProps) => {
+const Table = ({ apiData, columns, loading, filteredData }: TableProps) => {
   return (
     <Box className="flex flex-col items-start w-3/4 mt-8">
       <Typography variant="h4" className="!font-extrabold">
@@ -21,7 +11,7 @@ const Table = ({ apiData, columns, loading, filterData }: TableProps) => {
 
       <Box className="flex gap-4 mt-2 mb-2">
         <Chip label={`Total: ${apiData.length || '-'}`} />
-        <Chip color="primary" label={`Filtered: ${filterData().length || '-'}`} />
+        <Chip color="primary" label={`Filtered: ${filteredData.length || '-'}`} />
       </Box>
 
       {loading && (
@@ -43,7 +33,7 @@ const Table = ({ apiData, columns, loading, filterData }: TableProps) => {
             </Box>
           ) : (
             <DataGrid
-              rows={filterData()}
+              rows={filteredData}
               columns={columns}
               pagination
               initialState={{

@@ -1,35 +1,7 @@
-import React from 'react';
 import { Box, Typography, MenuItem, IconButton, Skeleton, Divider, Button, TextField } from '@mui/material';
-import { GridColDef } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-
-interface ConditionType {
-  left: string;
-  operator: string;
-  value: string;
-}
-
-interface ComparisonOptionType {
-  label: string;
-  value: string;
-}
-
-interface ConditionBuilderProps {
-  conditions: ConditionType[][];
-  columns: GridColDef[];
-  handleLeftConditionChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => void;
-  handleOperatorChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => void;
-  handleValueChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => void;
-  handleAddCondition: (groupIndex: number) => void;
-  handleMouseEnterAddIcon: (groupIndex: number) => void;
-  handleMouseLeaveAddIcon: (groupIndex: number) => void;
-  handleDeleteCondition: (groupIndex: number, index: number) => void;
-  handleAddGroup: () => void;
-  loading: boolean;
-  url: string;
-  comparisonOptions: ComparisonOptionType[];
-}
+import { ConditionBuilderProps } from '../@types/types'
 
 const ConditionBuilder = ({
   conditions,
