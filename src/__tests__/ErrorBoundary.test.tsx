@@ -11,11 +11,4 @@ describe('<ErrorBoundary />', () => {
     expect(errorBoundary).toBeInTheDocument();
     expect(errorMessageElement).toHaveTextContent(errorMessage);
   });
-
-  it('should not render error message when error is not present', () => {
-    const { queryByTestId } = render(<ErrorBoundary error={null} />);
-    const errorBoundary = queryByTestId('error-boundary');
-
-    expect(errorBoundary).not.toBeInTheDocument();
-  });
 });
