@@ -124,10 +124,10 @@ const Content = (props: {
   handleLeftConditionChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => void,
   handleOperatorChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => void,
   handleValueChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, groupIndex: number, index: number) => void,
-  handleMouseEnterAddIcon: Function,
-  handleMouseLeaveAddIcon: Function,
-  handleAddCondition: Function,
-  handleDeleteCondition: Function,
+  handleMouseEnterAddIcon: (groupIndex: number) => void,
+  handleMouseLeaveAddIcon: (groupIndex: number) => void,
+  handleAddCondition: (groupIndex: number) => void,
+  handleDeleteCondition: (groupIndex: number, index: number) => void,
 }) => {
   const { groupConditions, groupIndex, url, loading, columns, comparisonOptions, handleLeftConditionChange, handleOperatorChange, handleValueChange, handleMouseEnterAddIcon, handleMouseLeaveAddIcon, handleAddCondition, handleDeleteCondition } = props;
   return (
