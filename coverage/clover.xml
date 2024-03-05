@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709615502817" clover="3.2.0">
-  <project timestamp="1709615502817" name="All files">
-    <metrics statements="112" coveredstatements="62" conditionals="58" coveredconditionals="34" methods="40" coveredmethods="19" elements="210" coveredelements="115" complexity="0" loc="112" ncloc="112" packages="4" files="6" classes="6"/>
+<coverage generated="1709658163514" clover="3.2.0">
+  <project timestamp="1709658163514" name="All files">
+    <metrics statements="124" coveredstatements="72" conditionals="59" coveredconditionals="34" methods="41" coveredmethods="20" elements="224" coveredelements="126" complexity="0" loc="124" ncloc="124" packages="4" files="6" classes="6"/>
     <package name="components">
-      <metrics statements="25" coveredstatements="18" conditionals="28" coveredconditionals="25" methods="18" coveredmethods="11"/>
+      <metrics statements="37" coveredstatements="28" conditionals="29" coveredconditionals="25" methods="19" coveredmethods="12"/>
       <file name="ConditionBuilder.tsx" path="D:\IA+code\code\condition-builder\src\components\ConditionBuilder.tsx">
-        <metrics statements="21" coveredstatements="14" conditionals="18" coveredconditionals="15" methods="16" coveredmethods="9"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="23" count="6" type="stmt"/>
-        <line num="24" count="8" type="stmt"/>
-        <line num="39" count="6" type="stmt"/>
-        <line num="40" count="8" type="stmt"/>
-        <line num="46" count="6" type="stmt"/>
-        <line num="47" count="8" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="94" count="1" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="104" count="1" type="stmt"/>
-        <line num="113" count="6" type="stmt"/>
-        <line num="114" count="8" type="stmt"/>
-        <line num="117" count="8" type="stmt"/>
-        <line num="127" count="6" type="stmt"/>
-        <line num="130" count="8" type="stmt"/>
+        <metrics statements="33" coveredstatements="24" conditionals="19" coveredconditionals="15" methods="17" coveredmethods="10"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="8" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="48" count="8" type="stmt"/>
+        <line num="49" count="8" type="cond" truecount="4" falsecount="1"/>
+        <line num="50" count="8" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="117" count="2" type="stmt"/>
+        <line num="132" count="8" type="stmt"/>
+        <line num="133" count="8" type="stmt"/>
+        <line num="136" count="8" type="stmt"/>
+        <line num="160" count="2" type="stmt"/>
+        <line num="161" count="6" type="stmt"/>
+        <line num="162" count="6" type="stmt"/>
+        <line num="179" count="2" type="stmt"/>
+        <line num="194" count="6" type="stmt"/>
+        <line num="195" count="6" type="stmt"/>
+        <line num="198" count="8" type="stmt"/>
       </file>
       <file name="ErrorBoundary.tsx" path="D:\IA+code\code\condition-builder\src\components\ErrorBoundary.tsx">
         <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
