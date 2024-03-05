@@ -89,6 +89,25 @@ const Home = () => {
     setConditions(newConditions);
   };
 
+  const handleMouseEnterAddIcon = (groupIndex: number) => {
+    const newConditions = [...conditions];
+    const hasFakeOR = newConditions[groupIndex].some(condition => condition.operator === 'OR_HOVER');
+
+    if (!hasFakeOR) {
+      newConditions[groupIndex] = [
+        ...newConditions[groupIndex],
+        { left: '', operator: 'OR_HOVER', value: '' }
+      ];
+      setConditions(newConditions);
+    }
+  };
+
+  const handleMouseLeaveAddIcon = (groupIndex: number) => {
+    const newConditions = [...conditions];
+    newConditions[groupIndex] = newConditions[groupIndex].filter(condition => condition.operator !== 'OR_HOVER');
+    setConditions(newConditions);
+  };
+
   const handleDeleteCondition = (groupIndex: number, index: number) => {
     const newConditions = [...conditions];
     const group = newConditions[groupIndex];
@@ -182,7 +201,7 @@ const Home = () => {
           {conditions?.map((groupConditions, groupIndex) => (
             <>
               {groupIndex > 0 && (
-                <Box className="flex flex-col items-start w-3/4 mt-4">
+                <Box key={groupIndex} className="flex flex-col items-start w-3/4 mt-4">
                   <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
                   <Box className="ml-5">
                     <Typography variant="h6" className="font-bold text-gray-500">
@@ -193,9 +212,13 @@ const Home = () => {
                 </Box>
               )}
 
-              <Box key={groupIndex} className="flex flex-col items-center justify-center w-3/4 gap-6 p-4 mt-4 border shadow-md">
+              <Box key={groupIndex} className="flex flex-col items-center justify-center w-3/4 gap-6 p-4 mt-4 border rounded shadow-md">
                 {groupConditions?.map((condition, index) => (
                   <Box key={index} className="flex items-center justify-center w-full gap-4">
+                    {condition.operator === 'OR_HOVER' && (
+                      <Skeleton variant="rectangular" className="w-full !h-12" />
+                    )}
+
                     {loading && (
                       <>
                         <Skeleton variant="rectangular" className="w-1/3 !h-10" />
@@ -206,10 +229,10 @@ const Home = () => {
                       </>
                     )}
 
-                    {url && !loading && (
+                    {url && !loading && condition.operator !== 'OR_HOVER' && (
                       <>
                         {index > 0 && (
-                          <Typography variant="body1" className="mr-2">OR</Typography>
+                          <Typography variant="body1" className="mr-2 !font-extrabold text-blue-500">OR</Typography>
                         )}
                         <TextField
                           className="w-1/3"
@@ -244,9 +267,15 @@ const Home = () => {
                           placeholder="Value"
                           value={condition.value}
                           onChange={(event) => handleValueChange(event, groupIndex, index)}
+                          type={condition.operator === 'greaterThan' || condition.operator === 'lessThan' ? 'number' : 'text'}
                         />
 
-                        <IconButton color="info" onClick={() => handleAddCondition(groupIndex)}>
+                        <IconButton
+                          color="info"
+                          onClick={() => handleAddCondition(groupIndex)}
+                          onMouseEnter={() => handleMouseEnterAddIcon(groupIndex)}
+                          onMouseLeave={() => handleMouseLeaveAddIcon(groupIndex)}
+                        >
                           <AddIcon />
                         </IconButton>
 
