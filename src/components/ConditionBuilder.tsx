@@ -46,6 +46,19 @@ const ContentElements = (props: {
   handleDeleteCondition: (groupIndex: number, index: number) => void,
 }) => {
   const { url, loading, condition, index, groupIndex, columns, comparisonOptions, handleLeftConditionChange, handleOperatorChange, handleValueChange, handleMouseEnterAddIcon, handleMouseLeaveAddIcon, handleAddCondition, handleDeleteCondition } = props;
+
+  if (loading) {
+    return (
+      <>
+        <Skeleton variant="rectangular" className="w-1/3 !h-10" />
+        <Skeleton variant="rectangular" className="w-1/3 !h-10" />
+        <Skeleton variant="rectangular" className="w-1/3 !h-10" />
+        <Skeleton variant="circular" className="w-12 !h-12" />
+        <Skeleton variant="circular" className="w-12 !h-12" />
+      </>
+    );
+  }
+
   if (url && !loading && condition.operator !== 'OR_HOVER') {
     return (
       <>
@@ -157,23 +170,26 @@ const Content = (props: {
   );
 };
 
-const BottomActions = (props: { conditions: ConditionType[][], handleAddGroup: () => void }) => {
-  const { conditions, handleAddGroup } = props;
-  return (
-    <Box className="flex flex-col items-start w-3/4">
-      {conditions.length > 0 && (
-        <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
-      )}
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        onClick={handleAddGroup}
-        data-testid="condition-builder-add-group-button"
-      >
-        {conditions.length === 0 ? 'Add Filters' : 'AND'}
-      </Button>
-    </Box>
-  );
+const BottomActions = (props: { conditions: ConditionType[][], handleAddGroup: () => void, loading: boolean }) => {
+  const { conditions, handleAddGroup, loading } = props;
+  if (!loading) {
+    return (
+      <Box className="flex flex-col items-start w-3/4">
+        {conditions.length > 0 && (
+          <Divider className="pr-10 -mt-2 !h-8" orientation="vertical" />
+        )}
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          onClick={handleAddGroup}
+          data-testid="condition-builder-add-group-button"
+        >
+          {conditions.length === 0 ? 'Add Filters' : 'AND'}
+        </Button>
+      </Box>
+    );
+  }
+  return null;
 };
 
 const ConditionBuilder = (props: ConditionBuilderProps) => {
@@ -214,7 +230,7 @@ const ConditionBuilder = (props: ConditionBuilderProps) => {
           />
         </React.Fragment>
       ))}
-      <BottomActions conditions={conditions} handleAddGroup={handleAddGroup} />
+      <BottomActions conditions={conditions} handleAddGroup={handleAddGroup} loading={loading} />
     </>
   );
 };
