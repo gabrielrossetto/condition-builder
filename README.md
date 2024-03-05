@@ -31,7 +31,7 @@ This project is called the Condition Builder. This tool allows you to load an ar
 - [x] User can see filtered data list when valid conditions are built.
 
 
-![Live Demo](https://www.google.com/)
+![Live Demo](https://github.com/gabrielrossetto/condition-builder/assets/42679806/1c8183f7-dec7-4524-bdb0-9d04b89c8cb7)
 
 ### Supported condition operators:
 
@@ -58,25 +58,25 @@ Each condition supports the following comparisons:
 ### Next steps / Improvements / Enhancements:
 
 - **Cypress UI Tests:**
-  - [] *Configuration:* Set up Cypress for UI testing to ensure the application functions correctly from an end-user perspective.
-  - [] *Improve coverage:* Enhance test coverage to catch more edge cases and ensure robustness.
+  - [ ] *Configuration:* Set up Cypress for UI testing to ensure the application functions correctly from an end-user perspective.
+  - [ ] *Improve coverage:* Enhance test coverage to catch more edge cases and ensure robustness.
 
 - **Unit Tests:**
-  - [] *Increase coverage:* Even if unit tests have been created, explore opportunities to further increase test coverage for components to minimize bugs and improve code quality.
+  - [ ] *Increase coverage:* Even if unit tests have been created, explore opportunities to further increase test coverage for components to minimize bugs and improve code quality.
 
 - **UI/UX:**
-  - [] *Responsive Design:*  Optimize the application layout and styling to adapt seamlessly to different screen sizes and resolutions, ensuring a consistent and user-friendly experience across various devices, including smartphones and tablets.
-  - [] *Accessibility:* Enhance accessibility features to ensure the application can be used by individuals with disabilities, improving inclusivity and usability.
-  - [] *Figma Design:* Create a Figma design to visualize and iterate on improvements to the user interface and experience, fostering collaboration and alignment among team members.
-  - [] *Vitepress:* Transition Components/Hooks Docs from .md to Vitepress for documentation, providing a more structured and customizable platform for documentation.
-  - [] *Add coverage marker on GitHub:* Integrate coverage markers on GitHub to track and visualize test coverage directly within the repository, facilitating code review and quality assurance processes.
+  - [ ] *Responsive Design:*  Optimize the application layout and styling to adapt seamlessly to different screen sizes and resolutions, ensuring a consistent and user-friendly experience across various devices, including smartphones and tablets.
+  - [ ] *Accessibility:* Enhance accessibility features to ensure the application can be used by individuals with disabilities, improving inclusivity and usability.
+  - [ ] *Figma Design:* Create a Figma design to visualize and iterate on improvements to the user interface and experience, fostering collaboration and alignment among team members.
+  - [ ] *Vitepress:* Transition Components/Hooks Docs from .md to Vitepress for documentation, providing a more structured and customizable platform for documentation.
+  - [ ] *Add coverage marker on GitHub:* Integrate coverage markers on GitHub to track and visualize test coverage directly within the repository, facilitating code review and quality assurance processes.
 
 - **Performance and Error Handling:**
-  - [] *Improve performance:* Optimize application performance to enhance user experience, reduce load times, and ensure smooth interactions.
-  - [] *Enhance error handling:* Implement robust error handling mechanisms to gracefully handle unexpected errors and provide informative feedback to users, enhancing reliability and user trust.
+  - [ ] *Improve performance:* Optimize application performance to enhance user experience, reduce load times, and ensure smooth interactions.
+  - [ ] *Enhance error handling:* Implement robust error handling mechanisms to gracefully handle unexpected errors and provide informative feedback to users, enhancing reliability and user trust.
 
 - **Monitoring and Logs:**
-  - [] *New Relic Integration:* Set up monitoring and logging using New Relic to monitor application performance, track errors, and gain insights into usage patterns, enabling proactive maintenance and optimization.
+  - [ ] *New Relic Integration:* Set up monitoring and logging using New Relic to monitor application performance, track errors, and gain insights into usage patterns, enabling proactive maintenance and optimization.
 
 ---------------------------------------------------------------------
 
