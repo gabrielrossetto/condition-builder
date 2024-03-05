@@ -28,10 +28,10 @@ This project is called the Condition Builder. This tool allows you to load an ar
 - [x] User can add an "or" condition by pressing the plus button at the end of each row.
 - [x] User can add an "and" condition by pressing the "and" button below each card container.
 - [x] User can see a list of loaded data at the bottom of the page.
-- [x] User can see filtered data list when valid conditions are built.
+- [x] User can see a filtered data list when valid conditions are built.
 
 
-![Live Demo](https://github.com/gabrielrossetto/condition-builder/assets/42679806/1c8183f7-dec7-4524-bdb0-9d04b89c8cb7)
+[Video Demo](https://github.com/gabrielrossetto/condition-builder/assets/42679806/a7f3a6c0-b0b8-4e20-b142-a5f65819b746)
 
 ### Supported condition operators:
 
@@ -46,13 +46,13 @@ Each condition supports the following comparisons:
 
 ### Requirements:
 
-- [x] Use a recent if not latest version of React and TypeScript.
+- [x] Use a recent if not the latest version of React and TypeScript.
 - [x] Use MUI for UI components, or another Design System if preferred.
 - [x] Avoid using Redux or other state managers to keep the application simple.
 
 ### Recommendations:
 
-- [x] Provide input validations, especially for comparison operators like Greater than and Less than.
+- [x] Provide input validations for comparison operators like Greater than and Less than.
 - [x] Implement visual feedback for users, such as indicating where a new "or" condition will be inserted when hovering over the plus button.
 
 ### Next steps / Improvements / Enhancements:
@@ -62,7 +62,7 @@ Each condition supports the following comparisons:
   - [ ] *Improve coverage:* Enhance test coverage to catch more edge cases and ensure robustness.
 
 - **Unit Tests:**
-  - [ ] *Increase coverage:* Even if unit tests have been created, explore opportunities to further increase test coverage for components to minimize bugs and improve code quality.
+  - [ ] *Increase coverage:* Even if unit tests have been created, explore opportunities to increase further test coverage for components to minimize bugs and improve code quality.
 
 - **UI/UX:**
   - [ ] *Responsive Design:*  Optimize the application layout and styling to adapt seamlessly to different screen sizes and resolutions, ensuring a consistent and user-friendly experience across various devices, including smartphones and tablets.
